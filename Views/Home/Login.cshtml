@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Employee
+﻿@model WebApplication1.Models.LoginViewModel
 
 @{
     Layout = null;
@@ -20,23 +20,25 @@
             <div class="container-login100">
                 <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
                     @using (Html.BeginForm("login", "Home",
-                            new { ReturnUrl = ViewBag.ReturnUrl },
                             FormMethod.Post, new { @class = "login100-form validate-form" }))
                     {
                         @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true)
                         <span class="login100-form-title p-b-33">
                             Account Login
                         </span>
 
                         <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                            <input class="input100" type="text" name="email" placeholder='@Html.DisplayNameFor(m=>m.Username)'>
+                            @*@Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "input100", @placeholder = @Html.DisplayNameFor(m => m.userName) } })*@
+                            <input class="input100" type="text" name="userName" placeholder='@Html.DisplayNameFor(m=>m.userName)'>
+                            @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger" })
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>
 
                         <div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
-                            <input class="input100" type="password" name="pass" placeholder="@Html.DisplayNameFor(m=>m.Password)">
+                            @*@Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "input100", @placeholder = @Html.DisplayNameFor(m => m.password) } })*@
+                            <input class="input100" type="password" name="password" placeholder='@Html.DisplayNameFor(m=>m.password)'>
+                            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
                             <span class="focus-input100-1"></span>
                             <span class="focus-input100-2"></span>
                         </div>

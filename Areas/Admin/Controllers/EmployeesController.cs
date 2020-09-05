@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,26 +6,22 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using WebApplication1.Models;
 
-namespace WebApplication1.Controllers
+namespace WebApplication1.Areas.Admin.Controllers
 {
-    [OutputCache(Duration = 1)]//如果Controller底下裡的Action方法，其中有給View使用@Html.Action()呼叫的話，就用這個  
-    [Authorize]
     public class EmployeesController : Controller
     {
         private Model db = new Model();
 
-        // GET: Employees
+        // GET: Admin/Employees
         public ActionResult Index()
         {
-            string strUserData = ((FormsIdentity)(HttpContext.User.Identity)).Ticket.UserData;
-            Employee employee = JsonConvert.DeserializeObject<Employee>(strUserData);
-            return View(db.Employee.ToList());
+            var employee = db.Employee.Include(e => e.Group_value);
+            return View(employee.ToList());
         }
 
-        // GET: Employees/Details/5
+        // GET: Admin/Employees/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -41,18 +36,19 @@ namespace WebApplication1.Controllers
             return View(employee);
         }
 
-        // GET: Employees/Create
+        // GET: Admin/Employees/Create
         public ActionResult Create()
         {
+            ViewBag.Auth = new SelectList(db.Group, "G_no", "Group_name");
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: Admin/Employees/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Username,Password,Auth")] Employee employee)
+        public ActionResult Create([Bind(Include = "Username,Password,PasswordSalt,Auth")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -61,10 +57,11 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Auth = new SelectList(db.Group, "G_no", "Group_name", employee.Auth);
             return View(employee);
         }
 
-        // GET: Employees/Edit/5
+        // GET: Admin/Employees/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -76,15 +73,16 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Auth = new SelectList(db.Group, "G_no", "Group_name", employee.Auth);
             return View(employee);
         }
 
-        // POST: Employees/Edit/5
+        // POST: Admin/Employees/Edit/5
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Username,Password,Auth")] Employee employee)
+        public ActionResult Edit([Bind(Include = "Username,Password,PasswordSalt,Auth")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -92,10 +90,11 @@ namespace WebApplication1.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.Auth = new SelectList(db.Group, "G_no", "Group_name", employee.Auth);
             return View(employee);
         }
 
-        // GET: Employees/Delete/5
+        // GET: Admin/Employees/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -110,7 +109,7 @@ namespace WebApplication1.Controllers
             return View(employee);
         }
 
-        // POST: Employees/Delete/5
+        // POST: Admin/Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)

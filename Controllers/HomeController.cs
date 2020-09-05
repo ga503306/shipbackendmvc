@@ -1,15 +1,18 @@
-﻿using System;
+﻿using WebApplication1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Models;
+using Newtonsoft.Json;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private Model db = new Model();
+        
         public ActionResult Index()
         {
             return View();
@@ -34,6 +37,7 @@ namespace WebApplication1.Controllers
 
             return View();
         }
+        [AllowAnonymous]
         public ActionResult Login()
         {
             ViewBag.Message = "Your Login page.";
@@ -44,24 +48,60 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(string userName, string password)
+        public ActionResult Login(LoginViewModel loginViewModel)
         {
+            //FormCollection post
+            //string userName, string password
             if (ModelState.IsValid)
             {
-                //Member member = ValidateUser(userName, password);
-                //if (member != null)
+
+                //Employee employee = new Employee();
+                //employee.Username = userName;
+                //employee.PasswordSalt = Utility.CreateSalt();
+                //employee.Auth = "1";
+                //employee.Password = Utility.GenerateHashWithSalt(password, employee.PasswordSalt);
+                //db.Employee.Add(employee);
+                //db.SaveChanges();
+
+                //Employee employee = ValidateUser(userName, password);
+                //if (employee != null)
                 //{
-                //    Utility.GetPerssion(member);
-                //    string userData = JsonConvert.SerializeObject(member);
+                //    //Utility.GetPerssion(member);
+                //    string userData = JsonConvert.SerializeObject(employee);
                 //    Utility.SetAuthenTicket(userData, userName);
-                    return RedirectToAction("Index", "Employees");
+                //    return RedirectToAction("Index", "Employees");
                 //}
-                //ViewBag.message = "登入失敗!";
-                //return View();
+
+                Employee employee = ValidateUser(loginViewModel.userName, loginViewModel.password);
+                if (employee != null)
+                {
+                    //Utility.GetPerssion(member);
+                    string userData = JsonConvert.SerializeObject(employee);
+                    Utility.SetAuthenTicket(userData, loginViewModel.userName);
+                    return RedirectToAction("Index", "Employees");
+                }
+                ViewBag.message = "登入失敗!";
+                return View();
             }
             ViewBag.message = "登入失敗!";
             return View();
 
+        }
+        private Employee ValidateUser(string userName, string password)
+        {
+            Employee employee = db.Employee.SingleOrDefault(o => o.Username == userName);
+            if (employee == null)
+            {
+                return null;
+            }
+            string saltPassword = Utility.GenerateHashWithSalt(password, employee.PasswordSalt);
+            return saltPassword == employee.Password ? employee : null;
+        }
+
+        public ActionResult LogOff()
+        {
+            System.Web.Security.FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
     }
 }

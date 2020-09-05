@@ -42,8 +42,7 @@ namespace WebApplication1
                      "~/Scripts/jquery.flot.stack.js",
                      "~/Scripts/jquery.flot.crosshair.js",
                      "~/Scripts/jquery.flot.tooltip.min.js",
-                     "~/Scripts/chart-page-init.js",
-                     "~/Scripts/login.js"));
+                     "~/Scripts/chart-page-init.js"));
         }
     }
 }

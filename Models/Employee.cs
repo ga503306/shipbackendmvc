@@ -14,11 +14,20 @@ namespace WebApplication1.Models
         [Display(Name ="±b¸¹")]
         public string Username { get; set; }
 
-        [StringLength(30)]
+        [StringLength(100)]
         [Display(Name = "±K½X")]
         public string Password { get; set; }
 
+        //[StringLength(10)]
+        //public string Auth { get; set; }
+
+        [StringLength(100)]
+        [Display(Name = "±K½XÆQ")]
+        public string PasswordSalt { get; set; }
+
         [StringLength(10)]
-        public string Auth { get; set; }
+        public string Auth { set; get; }
+        [ForeignKey("Auth")]
+        public virtual Group Group_value { set; get; }
     }
 }
