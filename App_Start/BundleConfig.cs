@@ -22,8 +22,7 @@ namespace WebApplication1
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/popper.min.js",
                       "~/Scripts/bootstrap.js",
-                       "~/Scripts/perfect-scrollbar.jquery.min.js",
-                       "~/Scripts/sparkline.js"));
+                       "~/Scripts/perfect-scrollbar.jquery.min.js"));
             //"~/Content/site.css",
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
