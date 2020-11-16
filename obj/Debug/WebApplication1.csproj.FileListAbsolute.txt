@@ -89,5 +89,3 @@ D:\火箭\shipbackendmvc\WebApplication1\WebApplication1\bin\EntityFramework.Sql
 D:\火箭\shipbackendmvc\WebApplication1\WebApplication1\bin\EntityFramework.xml
 D:\火箭\shipbackendmvc\WebApplication1\WebApplication1\bin\EntityFramework.SqlServer.xml
 D:\火箭\shipbackendmvc\WebApplication1\WebApplication1\bin\zh-Hant\EntityFramework.resources.dll
-D:\github\shipbackendmvc\obj\Debug\WebApplication1.dll
-D:\github\shipbackendmvc\obj\Debug\WebApplication1.pdb
